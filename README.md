@@ -57,7 +57,7 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 │
 └── media/                  # Optional uploaded files</pre>
 
-## Features
+### Features
 
 - Organizes books into volumes and chapters using Markdown.
 - Reusable base templates for header, footer, and hero section.
@@ -65,26 +65,56 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 - Static folder for CSS, JS, and images.
 - Media folder for optional uploaded files.
 
-## Requirements
+### Requirements
 
 - Python 3.x
 - Django 5.x
 - Optional: Markdown parsing library if rendering chapters dynamically.
 
-## Usage
+### Usage
 
 1. Clone the repository.
-2. Create a virtual environment and install dependencies.
+2. Create a virtual environment and activate it (from the main folder `library`):
+
+```bash
+# Create the virtual environment (only needed once)
+python -m venv venv
+
+# Activate the virtual environment
+# On Linux/macOS:
+source venv/bin/activate
+
+# (Optional) Install dependencies if not already installed
+pip install -r requirements.txt
+```
+
 3. Run migrations:
-   ```bash
-   python manage.py migrate
-   ```
-4. Start the development server:
-   ```bash
-   python manage.py runserver 4000
-   ```
-5. Open your browser at `http://127.0.0.1:4000/`.
-6. Access the Django admin at `http://127.0.0.1:4000/admin/`.
+
+```bash
+python manage.py migrate
+```
+
+4. Run the development server on port 4000:
+
+```bash
+python manage.py runserver 4000
+```
+
+5. Access the site in your browser:
+
+```
+http://127.0.0.1:4000/
+```
+
+6. Optional: Create a superuser to access the Django admin:
+
+```bash
+python manage.py createsuperuser
+```
+
+---
+
+This `README.md` preserves all commands as plain text and code blocks, ready to upload to a private GitHub repository.
 
 ## License
 
