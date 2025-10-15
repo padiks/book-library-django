@@ -4,7 +4,7 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 
 ## Project Structure
 
-library/                    # Django project root
+<pre>library/                    # Django project root
 ├── manage.py               # Django management script
 ├── library/                # Django project folder
 │   ├── __init__.py
@@ -55,7 +55,7 @@ library/                    # Django project root
 │   ├── vendor/
 │   └── img/
 │
-└── media/                  # Optional uploaded files
+└── media/                  # Optional uploaded files</pre>
 
 ## Features
 
