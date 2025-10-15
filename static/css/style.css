@@ -1,0 +1,78 @@
+:root {
+  --default-font: "Spectral", Arial, sans-serif;
+  --heading-font: "IM Fell English", "Nunito", sans-serif;
+  --nav-font: "Poppins", sans-serif;
+}
+/* ID-based reusable quote style (unique per page) #fff8f2; */
+#q {
+  display: block;
+	background-color: #f0f0f0;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  color: #555;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* if you put a <p> inside the container, remove its default spacing/bg */
+#q p {
+  margin: 0;
+  background-color: transparent;
+}
+
+/* ensure any child elements don't show a white background */
+#q * {
+  background-color: transparent;
+}
+
+/* Underline and disabled text styling:
+   - `u`: custom light gray underline using gradient
+   - `.d`: disabled/gray text with default bullet preserved */
+u {
+  text-decoration: none;
+  background-image: linear-gradient(to right, #ccc, #eee);
+  background-repeat: no-repeat;
+  background-size: 100% 0.15em;
+  background-position: 0 1.15em;
+  padding-bottom: 0.3em;
+  color: #333;
+  font-weight: 500;
+}
+
+.d {
+  color: #999 !important;
+  font-weight: 500 !important;
+  cursor: default !important;
+  text-decoration: none !important;
+}
+
+.d::marker {
+  color: initial !important;
+}
+
+/* Blockquote styling with Special Elite typewriter font, big opening quote, and adjusted spacing */
+blockquote {
+	height: 100%;
+	margin-bottom: -15px !important;
+	font-family: "Special Elite", Arial, cursive;
+	font-weight: 100;
+	font-size: 2rem;
+	max-width: 700px;       
+	line-height: 1.4;
+	position: relative;
+	margin: 0 auto;         
+	padding: .5rem 0.5rem;
+}
+
+blockquote:before {
+	content: '“';
+	position: absolute;
+	color: #f1efe6;
+	font-size: 6rem;
+	left: -1.4rem;
+	top: -1.4rem;
+}
+
+blockquote:after {
+	content: none;
+}
