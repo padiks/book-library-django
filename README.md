@@ -154,6 +154,8 @@ python manage.py startapp library
 **c.** Add the app to `INSTALLED_APPS` in `library/settings.py`:
 
 ```python
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
