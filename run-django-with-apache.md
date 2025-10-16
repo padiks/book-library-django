@@ -1,6 +1,6 @@
 # Run Django with Apache (mod_wsgi) Instead of Gunicorn
 
-Quick setup to run your Django app with Apache, including file permissions and port configuration.
+Quick setup to run your Django app with Apache, including static files, database permissions, and port configuration.
 
 ---
 
@@ -9,7 +9,7 @@ Quick setup to run your Django app with Apache, including file permissions and p
 ```bash
 sudo systemctl stop library.service      # Stop the running Gunicorn service immediately
 sudo systemctl disable library.service   # Prevent Gunicorn from starting on boot
-sudo systemctl status library.service    # Check if the service is stopped
+sudo systemctl status library.service    # Check the current status of Gunicorn
 ```
 
 ---
@@ -25,18 +25,7 @@ sudo systemctl restart apache2           # Restart Apache to apply changes
 
 ---
 
-## **Step 3: Collect static files**
-
-```bash
-cd /home/user/Public/web/library        # Go to your Django project
-python3 manage.py collectstatic         # Collect all static files (CSS, JS, images)
-```
-
-*Static files will be placed in `STATIC_ROOT` for Apache to serve.*
-
----
-
-## **Step 4: Configure Apache Virtual Host**
+## **Step 3: Configure Apache Virtual Host**
 
 ```bash
 sudo nano /etc/apache2/sites-available/library.conf
@@ -48,9 +37,9 @@ Paste the following:
 <VirtualHost *:4000>
     ServerName 127.0.0.1
 
-    # Serve static files
-    Alias /static /home/user/Public/web/library/static
-    <Directory /home/user/Public/web/library/static>
+    # Serve collected static files
+    Alias /static /home/user/Public/web/library/staticfiles
+    <Directory /home/user/Public/web/library/staticfiles>
         Require all granted
     </Directory>
 
@@ -61,7 +50,7 @@ Paste the following:
         </Files>
     </Directory>
 
-    # Run Django in a separate WSGI daemon process
+    # Run Django in its own WSGI daemon process
     WSGIDaemonProcess library python-home=/home/user/Public/web/library/venv python-path=/home/user/Public/web/library
     WSGIProcessGroup library
     WSGIScriptAlias / /home/user/Public/web/library/common/wsgi.py
@@ -71,17 +60,27 @@ Paste the following:
 *Explanation:*
 
 * `*:4000` → Apache listens on port 4000
-* `Alias /static` → Serves static files directly
-* `WSGIDaemonProcess` → Runs Django in its own process with virtualenv
-* `WSGIScriptAlias` → Points Apache to `wsgi.py`
+* `Alias /static` → Serves static files from `staticfiles`
+* `WSGIDaemonProcess` → Runs Django in a separate process using your virtual environment
+* `WSGIScriptAlias` → Points Apache to your `wsgi.py` file
 
 ---
 
-## **Step 5: Configure Apache to listen on port 4000**
+## **Step 4: Collect static files**
 
 ```bash
-sudo nano /etc/apache2/ports.conf       # Add the line:
-# Listen 4000
+cd /home/user/Public/web/library
+source venv/bin/activate                  # Activate your virtual environment
+python3 manage.py collectstatic           # Copy all static files to STATIC_ROOT
+```
+
+---
+
+## **Step 5: Set static file permissions**
+
+```bash
+sudo chown -R user:www-data /home/user/Public/web/library/staticfiles  # Apache can read static files
+sudo chmod -R 755 /home/user/Public/web/library/staticfiles            # Ensure read + execute access
 ```
 
 ---
@@ -95,7 +94,23 @@ sudo systemctl restart apache2          # Restart Apache to apply changes
 
 ---
 
-## **Step 7: Check Apache and logs**
+## **Step 7: Configure Apache ports**
+
+```bash
+sudo nano /etc/apache2/ports.conf       # Add the line:
+# Listen 4000
+```
+
+Then reload site:
+
+```bash
+sudo a2ensite library.conf
+sudo systemctl restart apache2
+```
+
+---
+
+## **Step 8: Verify Apache**
 
 ```bash
 sudo ss -tuln | grep 4000               # Verify Apache is listening on port 4000
@@ -103,32 +118,56 @@ sudo netstat -tuln | grep 4000          # Alternative check
 sudo tail -n 20 /var/log/apache2/error.log  # View last 20 lines of Apache error log
 ```
 
+Check VirtualHost configuration:
+
+```
+*:8080                 debian.workgroup (/etc/apache2/sites-enabled/000-default.conf:1)
+*:4000                 127.0.0.1 (/etc/apache2/sites-enabled/library.conf:1)
+```
+
 ---
 
-## **Step 8: Set proper file permissions**
+## **Step 9: Set project file permissions**
 
 ```bash
-sudo chmod o+rx /home/user/Public/web            # Allow Apache to traverse home directory
+# Allow Apache to traverse home and project directories
+sudo chmod o+rx /home/user
+sudo chmod o+rx /home/user/Public
+sudo chmod o+rx /home/user/Public/web
 sudo chmod o+rx /home/user/Public/web/library
-sudo chmod -R o+rx /home/user/Public/web/library/static  # Static files readable by Apache
 
-sudo chown -R user:www-data /home/user/Public/web/library  # Set user owner, Apache group
+# Ensure source static files readable by Apache
+sudo chmod -R o+rx /home/user/Public/web/library/static
 
-# Owner full access, group read+execute
+# Set project ownership: user as owner, Apache group
+sudo chown -R user:www-data /home/user/Public/web/library
+
+# Set directory permissions: owner full, group read+execute
 sudo chmod -R 750 /home/user/Public/web/library
 
 # Ensure all directories are searchable
 find /home/user/Public/web/library -type d -exec chmod 750 {} \;
 
-# Ensure all files are readable by group
+# Ensure files are readable by group
 find /home/user/Public/web/library -type f -exec chmod 640 {} \;
+
+# Admin static & database adjustments
+sudo chown -R user:www-data /home/user/Public/web/library/static
+sudo chmod -R 755 /home/user/Public/web/library/static
+sudo chown -R user:www-data /home/user/Public/web/library
+find /home/user/Public/web/library -type d -exec chmod 775 {} \;
+find /home/user/Public/web/library -type f -exec chmod 664 {} \;
+sudo chmod -R 755 /home/user/Public/web/library/static
+sudo chmod 664 /home/user/Public/web/library/db.sqlite3
+
+sudo systemctl restart apache2          # Apply all permission changes
 ```
 
-*Explanation:* Proper permissions allow Apache to read and serve your project safely.
+*Explanation:* Proper permissions allow Apache to read static files, access the database, and serve the Django app securely.
 
 ---
 
-## **Step 9: Test**
+## **Step 10: Test**
 
 Open in your browser:
 
@@ -136,5 +175,6 @@ Open in your browser:
 http://127.0.0.1:4000/
 ```
 
-Your Django app should now load without `runserver` or `gunicorn`.
+Your Django app should now load **fully styled** with working admin CSS/JS, without using `runserver` or Gunicorn.
 
+Do you want me to do that?
