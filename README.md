@@ -8,7 +8,6 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 - Reusable base templates for header, footer, and hero section.
 - App templates for home page, book listing, chapters, search results, sitemap, and login.
 - Static folder for CSS, JS, and images.
-- Media folder for optional uploaded files.
 
 ### Requirements
 
