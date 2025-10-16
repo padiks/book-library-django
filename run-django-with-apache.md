@@ -131,8 +131,6 @@ Check VirtualHost configuration:
 
 ```bash
 # Allow Apache to traverse home and project directories
-sudo chmod o+rx /home/user
-sudo chmod o+rx /home/user/Public
 sudo chmod o+rx /home/user/Public/web
 sudo chmod o+rx /home/user/Public/web/library
 
@@ -178,3 +176,4 @@ http://127.0.0.1:4000/
 Your Django app should now load **fully styled** with working admin CSS/JS, without using `runserver` or Gunicorn.
 
 Do you want me to do that?
+
