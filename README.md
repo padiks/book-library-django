@@ -23,7 +23,7 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 │   │   └── index.md        # Optional TOC for the book
 │   └── ...
 │
-├── library/                # Django app for the library
+├── common/                # Django app for the library
 │   ├── __init__.py
 │   ├── admin.py            # Optional admin
 │   ├── apps.py
@@ -32,22 +32,21 @@ This is a Django-based Book Library project. It organizes books, volumes, and ch
 │   ├── urls.py             # App-specific routing
 │   ├── forms.py            # Optional search/login forms
 │   ├── helpers.py          # Markdown parser utility
-│   └── templates/
-│       ├── base/           # Header/footer templates
-│       │   ├── header.html
-│       │   ├── footer.html
-│       │   └── hero.html
-│       │
-│       ├── app/            # App templates
-│       │   ├── home.html
-│       │   ├── book_index.html    # Lists volumes/chapters
-│       │   ├── chapter.html       # Render Markdown chapter
-│       │   ├── search_results.html
-│       │   ├── sitemap.html
-│       │   └── login.html
-│       │
-│       └── static/         # About, Help, etc.
-│           └── file1.html
+│   ├── base/           # Header/footer templates
+│   │   ├── header.html
+│   │   ├── footer.html
+│   │   └── hero.html
+│   │
+│   ├── app/            # App templates
+│   │   ├── home.html
+│   │   ├── book_index.html    # Lists volumes/chapters
+│   │   ├── chapter.html       # Render Markdown chapter
+│   │   ├── search_results.html
+│   │   ├── sitemap.html
+│   │   └── login.html
+│   │
+│   └── static/         # About, Help, etc.
+│       └── file1.html
 │
 ├── static/                 # Global CSS/JS/images
 │   ├── css/
@@ -123,7 +122,7 @@ django-admin --version
 **f.** Start Django project in the current folder:
 
 ```
-django-admin startproject library .
+django-admin startproject common .
 ```
 
 **g.** Run Django development server on port 4000:
@@ -145,17 +144,21 @@ cd ~/Public/web/library
 source venv/bin/activate
 ```
 
-**b.** Create a Django app called `library`:
+**b.** Create a Django app called `common`:
 
 ```bash
-python manage.py startapp library
+python manage.py startapp common
 ```
 
-**c.** Add the app to `INSTALLED_APPS` in `library/settings.py`:
+**c.** Add the app to `INSTALLED_APPS` in `common/settings.py`:
 
 ```python
+#ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
 
+# Application definition
+
+# Add your 'common' app to INSTALLED_APPS if needed (not strictly necessary for just templates)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -163,20 +166,41 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'library',  # our app
 ]
+
+# Templates path
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'common/app', BASE_DIR / 'common/base'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# Static files path
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # where collectstatic will copy files
 ```
 
 **d.** Create folders for templates inside the app:
 
 ```bash
-mkdir -p library/templates/base
-mkdir -p library/templates/app
+mkdir -p common/base
+mkdir -p library/app
 ```
 
 **e.** Create simple Bootstrap templates:
 
-**`library/templates/base/header.html`**
+**`library/base/header.html`**
 
 ```html
 <!DOCTYPE html>
@@ -194,7 +218,7 @@ mkdir -p library/templates/app
 <div class="container mt-4">
 ```
 
-**`library/templates/base/footer.html`**
+**`library/base/footer.html`**
 
 ```html
 </div>
@@ -206,7 +230,7 @@ mkdir -p library/templates/app
 </html>
 ```
 
-**`library/templates/app/home.html`**
+**`library/app/home.html`**
 
 ```html
 {% include 'base/header.html' %}
