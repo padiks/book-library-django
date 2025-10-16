@@ -174,6 +174,3 @@ http://127.0.0.1:4000/
 ```
 
 Your Django app should now load **fully styled** with working admin CSS/JS, without using `runserver` or Gunicorn.
-
-Do you want me to do that?
-
