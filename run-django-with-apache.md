@@ -136,4 +136,5 @@ Open in your browser:
 http://127.0.0.1:4000/
 ```
 
-Your Django app should now load without `runserver` or Gunicorn.
+Your Django app should now load without `runserver` or `gunicorn`.
+
