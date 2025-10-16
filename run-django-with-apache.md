@@ -72,6 +72,7 @@ Paste the following:
 cd /home/user/Public/web/library
 source venv/bin/activate                  # Activate your virtual environment
 python3 manage.py collectstatic           # Copy all static files to STATIC_ROOT
+deactivate
 ```
 
 ---
@@ -174,3 +175,4 @@ http://127.0.0.1:4000/
 ```
 
 Your Django app should now load **fully styled** with working admin CSS/JS, without using `runserver` or Gunicorn.
+
