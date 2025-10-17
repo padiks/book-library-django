@@ -1,33 +1,36 @@
 from django.shortcuts import render
 from django.http import Http404
 from pathlib import Path
-import markdown
 from django.conf import settings
+import markdown
 
 BASE_BOOKS_PATH = Path(settings.BASE_DIR) / "books"
 
 
 def home(request):
-    """Homepage: list all books"""
+    """Homepage: list all books with dynamic title"""
     books = [b.name for b in BASE_BOOKS_PATH.iterdir() if b.is_dir()]
-    return render(request, 'home.html', {'books': books})
+    return render(request, 'home.html', {
+        'books': books,
+        'title': 'Home',
+    })
 
 
 def book_index(request, book_name, subpath=None):
     """
-    One route that handles:
+    Handles all routes:
       - /book/<book_name>/
       - /book/<book_name>/<volume>/
       - /book/<book_name>/<volume>/<chapter>/
       - /book/<book_name>/<chapter>/
-    Detects automatically if it's a folder or .md file.
+    Auto-detects folder vs. .md file and builds dynamic title.
     """
     current_path = BASE_BOOKS_PATH / book_name
     if subpath:
         current_path = current_path / subpath
 
     if not current_path.exists():
-        # Maybe user requested without trailing slash for an .md file name
+        # Try treating as .md file if user omitted suffix
         md_candidate = current_path.with_suffix(".md")
         if md_candidate.exists():
             current_path = md_candidate
@@ -37,10 +40,19 @@ def book_index(request, book_name, subpath=None):
     # ── Case 1: Direct .md file ─────────────────────────────
     if current_path.is_file() and current_path.suffix == ".md":
         html = markdown.markdown(current_path.read_text(encoding="utf-8"))
-        return render(request, "chapter.html", {
-            "content": html,
+
+        # Auto-title: Book / Volume / Chapter
+        title_parts = [book_name.replace('-', ' ').title()]
+        if subpath:
+            for part in Path(subpath).parts:
+                title_parts.append(part.replace('-', ' ').title())
+        title = " / ".join(title_parts)
+
+        return render(request, "markdown_page.html", {
             "book": book_name,
             "subpath": subpath,
+            "content": html,
+            "title": title,
         })
 
     # ── Case 2: Folder ──────────────────────────────────────
@@ -57,21 +69,35 @@ def book_index(request, book_name, subpath=None):
     else:
         html = "<p>No description available.</p>"
 
-    # Build folder + .md file listings
+    # List subfolders and .md files
     volumes = sorted([p.name for p in current_path.iterdir() if p.is_dir()])
-    mdfiles = sorted([
+    chapters = sorted([
         p.stem for p in current_path.glob("*.md")
         if p.name not in ("README.md", "index.md")
     ])
+
+    # Auto-title: Book / Volume
+    title_parts = [book_name.replace('-', ' ').title()]
+    if subpath:
+        for part in Path(subpath).parts:
+            title_parts.append(part.replace('-', ' ').title())
+    title = " / ".join(title_parts)
 
     return render(request, "book_index.html", {
         "book": book_name,
         "subpath": subpath,
         "content": html,
         "volumes": volumes,
-        "chapters": mdfiles,
+        "chapters": chapters,
+        "title": title,
     })
 
 
 def handler404(request, exception):
-    return render(request, "404.html", status=404)
+    """Fallback 404 page using book_index template"""
+    return render(request, "book_index.html", {
+        "title": "Page Not Found",
+        "content": "<p>Page not found.</p>",
+        "volumes": [],
+        "chapters": [],
+    }, status=404)
