@@ -1,8 +1,6 @@
 {% include 'header.html' %}
 
-<h2 class="title">
-  {{ book|title }}{% if subpath %} / {{ subpath|title }}{% endif %}
-</h2>
+<h2 class="title">{{ title }}</h2>
 
 <div class="content">
   {% if content %}
@@ -13,13 +11,13 @@
     <h3>Folders</h3>
     <ul>
       {% for v in volumes %}
-        {% if subpath %}
-          {% with newpath=subpath|add:'/'|add:v %}
-            <li><a href="{% url 'book_index' book_name=book subpath=newpath %}">{{ v|title }}</a></li>
-          {% endwith %}
-        {% else %}
-          <li><a href="{% url 'book_index' book_name=book subpath=v %}">{{ v|title }}</a></li>
-        {% endif %}
+        <li>
+          {% if subpath %}
+            <a href="{% url 'book_index' book_name=book subpath=subpath|add:'/'|add:v %}">{{ v|title }}</a>
+          {% else %}
+            <a href="{% url 'book_index' book_name=book subpath=v %}">{{ v|title }}</a>
+          {% endif %}
+        </li>
       {% endfor %}
     </ul>
   {% endif %}
@@ -28,13 +26,13 @@
     <h3>Chapters</h3>
     <ul>
       {% for c in chapters %}
-        {% if subpath %}
-          {% with newpath=subpath|add:'/'|add:c %}
-            <li><a href="{% url 'book_index' book_name=book subpath=newpath %}">{{ c|title }}</a></li>
-          {% endwith %}
-        {% else %}
-          <li><a href="{% url 'book_index' book_name=book subpath=c %}">{{ c|title }}</a></li>
-        {% endif %}
+        <li>
+          {% if subpath %}
+            <a href="{% url 'book_index' book_name=book subpath=subpath|add:'/'|add:c %}">{{ c|title }}</a>
+          {% else %}
+            <a href="{% url 'book_index' book_name=book subpath=c %}">{{ c|title }}</a>
+          {% endif %}
+        </li>
       {% endfor %}
     </ul>
   {% endif %}

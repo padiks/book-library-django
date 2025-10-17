@@ -1,7 +1,13 @@
 {% include "header.html" %}
+
 <main class="content">
+  {% if title %}
+    <h2 class="title">{{ title }}</h2>
+  {% endif %}
+
   <article class="markdown-body">
     {{ content|safe }}
   </article>
 </main>
+
 {% include "footer.html" %}
