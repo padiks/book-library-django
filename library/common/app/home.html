@@ -1,0 +1,27 @@
+{% include 'header.html' %}
+<h2 class="title">List of Light Novels</h2>
+<div class="content">
+  <p>
+    <span class="tooltip" data-tooltip="Explore the worlds of imagination and adventure
+    through these tales. Each story invites you to travel beyond the ordinary, meet
+    unforgettable characters, and experience journeys that stay with you long after
+    the last page is turned."></span>
+    <b>TANKEN</b> suru sekai wa souzou to bouken de afurete iru monogatari no naka ni.
+    Sorezore no monogatari ga, futsuu o koete tabi o shi, wasurerarenai kyarakutaa ni
+    deai, saigo no peeji o yonda nochi mo kokoro ni nokoru bouken o keiken saseru.
+  </p>
+  <ul>
+    <li><a href="{% url 'book_index' book_name='lorem-ipsum' %}">Lorem ipsum dolor sit amet</a></li>
+  </ul>
+</div>
+<div class="meta-bottom">
+  <i class="bi bi-folder"></i>
+  <ul class="cats">
+    <li><a href="{% url 'home' %}">Books</a></li>
+  </ul>
+  <i class="bi bi-tags"></i>
+  <ul class="tags">
+    <li><a href="#yes-search-is-later-need-to-fix-base-Books login first">Light Novel</a></li>
+  </ul>
+</div>
+{% include 'footer.html' %}

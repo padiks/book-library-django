@@ -1,0 +1,43 @@
+{% include 'header.html' %}
+
+<h2 class="title">
+  {{ book|title }}{% if subpath %} / {{ subpath|title }}{% endif %}
+</h2>
+
+<div class="content">
+  {% if content %}
+    {{ content|safe }}
+  {% endif %}
+
+  {% if volumes %}
+    <h3>Folders</h3>
+    <ul>
+      {% for v in volumes %}
+        {% if subpath %}
+          {% with newpath=subpath|add:'/'|add:v %}
+            <li><a href="{% url 'book_index' book_name=book subpath=newpath %}">{{ v|title }}</a></li>
+          {% endwith %}
+        {% else %}
+          <li><a href="{% url 'book_index' book_name=book subpath=v %}">{{ v|title }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if chapters %}
+    <h3>Chapters</h3>
+    <ul>
+      {% for c in chapters %}
+        {% if subpath %}
+          {% with newpath=subpath|add:'/'|add:c %}
+            <li><a href="{% url 'book_index' book_name=book subpath=newpath %}">{{ c|title }}</a></li>
+          {% endwith %}
+        {% else %}
+          <li><a href="{% url 'book_index' book_name=book subpath=c %}">{{ c|title }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+{% include 'footer.html' %}
