@@ -39,7 +39,10 @@ def book_index(request, book_name, subpath=None):
 
     # ── Case 1: Direct .md file ─────────────────────────────
     if current_path.is_file() and current_path.suffix == ".md":
-        html = markdown.markdown(current_path.read_text(encoding="utf-8"))
+        html = markdown.markdown(
+            current_path.read_text(encoding="utf-8"),
+            extensions=["nl2br"]  # <-- Enables automatic line breaks
+        )
 
         # Auto-title: Book / Volume / Chapter
         title_parts = [book_name.replace('-', ' ').title()]
@@ -63,9 +66,15 @@ def book_index(request, book_name, subpath=None):
     if folder_index.exists():
         html = folder_index.read_text(encoding="utf-8")
     elif readme.exists():
-        html = markdown.markdown(readme.read_text(encoding="utf-8"))
+        html = markdown.markdown(
+            readme.read_text(encoding="utf-8"),
+            extensions=["nl2br"]  # <-- Enables automatic line breaks
+        )
     elif index_md.exists():
-        html = markdown.markdown(index_md.read_text(encoding="utf-8"))
+        html = markdown.markdown(
+            index_md.read_text(encoding="utf-8"),
+            extensions=["nl2br"]  # <-- Enables automatic line breaks
+        )
     else:
         html = "<p>No description available.</p>"
 

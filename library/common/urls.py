@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include   # ✅ add include
 from common import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -10,6 +10,9 @@ urlpatterns = [
 
     # Single smart route for everything under /book/
     re_path(r'^book/(?P<book_name>[^/]+)(?:/(?P<subpath>.*))?/$', views.book_index, name='book_index'),
+
+    # ✅ Search route
+    path('search/', include('search.urls')),
 ]
 
 if settings.DEBUG:
