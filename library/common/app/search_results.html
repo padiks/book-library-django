@@ -1,0 +1,37 @@
+{% include 'header.html' %}
+
+<h2 class="title">Search Results for “{{ query|escape }}”</h2>
+
+<div class="search-widget widget-item">
+  <h3 class="widget-title">Search</h3>
+  <form action="{% url 'search' %}" method="get">
+    <input type="text" name="q" placeholder="Search..." required>
+    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+  </form>
+</div>
+
+<div class="content">
+  {% if results %}
+    {% for item in results %}
+      <div class="result">
+        <h4><a href="{{ item.url }}">{{ item.path|escape }}</a></h4>
+        <p>{{ item.match_snippet|safe }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No matching documents found.</p>
+  {% endif %}
+</div>
+
+<div class="meta-bottom">
+  <i class="bi bi-folder"></i>
+  <ul class="cats">
+    <li><a href="{% url 'home' %}">Books</a></li>
+  </ul>
+  <i class="bi bi-tags"></i>
+  <ul class="tags">
+    <a href="{% url 'search' %}?q={{ request.GET.q|default:'light+novel' }}">{{ request.GET.q|default:'Light Novel'|capfirst }}</a>
+  </ul>
+</div>
+
+{% include 'footer.html' %}
