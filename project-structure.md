@@ -20,10 +20,10 @@ library/                    # Django project root
 │   ├── app/                # App templates
 │   │   ├── home.html
 │   │   ├── book_index.html
-│   │   ├── chapter.html
+│   │   ├── markdown_page.html
 │   │   ├── search_results.html
-│   │   ├── sitemap.html
-│   │   └── login.html
+│   │   ├── sitemap.html    # Still not available 
+│   │   └── login.html      # Still not available
 │   │
 │   └── base/               # Header/footer templates
 │       ├── header.html
