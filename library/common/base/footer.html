@@ -5,14 +5,15 @@
   <section id="blog-author" class="blog-author section">
     <div class="container">
       <div class="author-container d-flex align-items-center">
-				<div>
-					<h4>「物語散策」(Monogatari Sansaku)</h4>
-					<p>
-						TANKEN suru sekai wa souzou to bouken de afurete iru monogatari no naka ni. 
-						Sorezore no monogatari ga, futsuu o koete tabi o shi, wasurerarenai kyarakutaa ni deai, 
-						saigo no peeji o yonda nochi mo kokoro ni nokoru bouken o keiken saseru.
-					</p>
-				</div>
+        <div>
+          <h4>「物語散策」(Monogatari Sansaku)</h4>
+		  <p>
+            EXPLORE the worlds of imagination and adventure through these tales. 
+            Each story invites you to travel beyond the ordinary, meet unforgettable 
+            characters, and experience journeys that stay with you long after the 
+            last page is turned.
+		  </p>
+		</div>
       </div>
     </div>
   </section>
@@ -31,13 +32,17 @@
 </div>
 <div class="col-lg-4 sidebar">
   <div class="widgets-container">
-		<div class="search-widget widget-item">
-			<h3 class="widget-title">Search</h3>
-			<form action="http://localhost:8080/tools/codeigniter/search" method="get">
-				<input type="text" name="q" placeholder="Search..." required>
-				<button type="submit" title="Search"><i class="bi bi-search"></i></button>
-			</form>
-		</div>		
+
+<div class="search-widget widget-item">
+  <h3 class="widget-title">Search</h3>
+  <form action="{% url 'search' %}" method="get">
+    <input type="text" name="q" placeholder="Search..." required>
+    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+  </form>
+</div>
+
+
+	
     <div class="recent-posts-widget widget-item">
       <h3 class="widget-title">Novel Sites</h3>
 			<div class="post-item" style="display:flex; align-items:center; gap:12px;">
@@ -70,7 +75,7 @@
 					</svg>
 				</div>
 				<div>
-					<h4 style="margin:0;"><a href="https://en.wikipedia.org/wiki/How_a_Realist_Hero_Rebuilt_the_Kingdom">Genjitsu Shugi Yusha no Okoku Saikenki)</a></h4>
+					<h4 style="margin:0;"><a href="https://en.wikipedia.org/wiki/How_a_Realist_Hero_Rebuilt_the_Kingdom">Genjitsu Shugi Yusha no Okoku Saikenki</a></h4>
 					<p style="margin:0;"><time datetime="2020-01-01">2014</time></p>
 				</div>
 			</div>
@@ -123,13 +128,13 @@
     <div class="tags-widget widget-item">
     <h3 class="widget-title">Tags</h3>
     <ul>
-      <li><a href="#% url 'search' %}?q=debian">Debian</a></li>
-      <li><a href="#% url 'search' %}?q=django">Django</a></li>
-      <li><a href="#% url 'search' %}?q=freebsd">FreeBSD</a></li>
-      <li><a href="#% url 'search' %}?q=light+novel">Light Novel</a></li>
-      <li><a href="#% url 'search' %}?q=linux">Linux</a></li>
-      <li><a href="#% url 'search' %}?q=lyrics">Lyrics</a></li>
-      <li><a href="#% url 'search' %}?q=web+novel">Web Novel</a></li>
+      <li><a href="{% url 'search' %}?q=debian">Debian</a></li>
+      <li><a href="{% url 'search' %}?q=django">Django</a></li>
+      <li><a href="{% url 'search' %}?q=freebsd">FreeBSD</a></li>
+      <li><a href="{% url 'search' %}?q=light+novel">Light Novel</a></li>
+      <li><a href="{% url 'search' %}?q=linux">Linux</a></li>
+      <li><a href="{% url 'search' %}?q=lyrics">Lyrics</a></li>
+      <li><a href="{% url 'search' %}?q=web+novel">Web Novel</a></li>
     </ul>
     </div>
   </div>
